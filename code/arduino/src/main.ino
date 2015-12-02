@@ -1,11 +1,11 @@
 #include <Servo.h>
-#include "Oscillator.h"
+#include <Oscillator.h>
 
 Oscillator osc;
 
 void setup()
 {
-    osc.attach(9);
+    osc.attach(9);
 }
 
 void loop()

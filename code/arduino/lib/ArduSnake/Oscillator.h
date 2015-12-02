@@ -5,7 +5,8 @@
 //-- (c) Juan Gonzalez-Gomez (Obijuan), Dec 2011
 //-- GPL license
 //--------------------------------------------------------------
-
+#ifndef Oscillator_h
+#define Oscillator_h
 
 #include <Servo.h>
 
@@ -63,3 +64,5 @@ class Oscillator
     //-- Reverse mode
     bool _rev;
 };
+
+#endif
