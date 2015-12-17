@@ -14,11 +14,10 @@ Oscillator::Oscillator(){
 
 float Oscillator::refresh(){
     _delta_time = (millis()-_ref_time) % _period;
-    float output = (float)_amplitude*sin(time_to_radians(_delta_time)
-                    + degrees_to_radians(_phase))
-                    + _offset
-                    + _trim;
-    return output;
+    return      (float)_amplitude*sin(time_to_radians(_delta_time)
+                + degrees_to_radians(_phase))
+                + _offset
+                + _trim;
 }
 
 void Oscillator::reset(){
