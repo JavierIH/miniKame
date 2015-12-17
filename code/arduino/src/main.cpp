@@ -28,7 +28,7 @@ void setup(){
     MDNS.addService("http", "tcp", 80);
     Serial.println(WiFi.localIP());
 
-    delay(1000);
+    delay(100);
     robot.init();
     Serial.println("Robot en marcha");
 }
@@ -36,7 +36,7 @@ void setup(){
 char command;
 
 void loop(){
-    robot.home();
+    /*robot.home();
     WiFiClient client = server.available();
     while (client.connected()){
         command = client.read();
@@ -51,13 +51,16 @@ void loop(){
             case 'D':
                 robot.turnR(2,500);
                 break;
-        /*    case 'J':
-                robot.jump(10,500);
-            case 'W':
-                robot.walk(10,500);*/
             default:
                 robot.home();
                 break;
         }
-    }
+    }*/
+    float frame_a[]={90,90,90,90,90+20,90-20,90-30,90+30};
+    robot.moveServos(1000, frame_a);
+    float frame_b[]={90,90,90-65,90+65,90+20,90-20,90-30,90+30};
+    robot.moveServos(0, frame_b);
+    delay(200);
+    robot.home();
+    delay(10000);
 }

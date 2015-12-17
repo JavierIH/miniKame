@@ -23,7 +23,7 @@ void MiniKame::init(){
     trim[6] = 6;
     trim[7] = 2;
 
-    for(int i=0; i<8; i++) oscillator[i].setTrim(trim[i]);
+    //for(int i=0; i<8; i++) oscillator[i].setTrim(trim[i]);
     for(int i=0; i<8; i++) servo[i].attach(board_pins[i]);
     home();
 }
@@ -116,38 +116,72 @@ void MiniKame::walk(float steps, float T=5000){
         oscillator[i].setOffset(offset[i]);
     }
 
-    unsigned long final = millis() + period[0]*steps;
-    unsigned int init = millis();
+    _final_time = millis() + period[0]*steps;
+    _init_time = millis();
     bool side;
-    while (millis() < final){
-        side = (int)((millis()-init) / (period[0]/2)) % 2;
-        servo[0].writeMicroseconds(oscillator[0].refresh()/180 * (MAX_PULSE_WIDTH-MIN_PULSE_WIDTH) + MIN_PULSE_WIDTH);
-        servo[1].writeMicroseconds(oscillator[1].refresh()/180 * (MAX_PULSE_WIDTH-MIN_PULSE_WIDTH) + MIN_PULSE_WIDTH);
-        servo[4].writeMicroseconds(oscillator[4].refresh()/180 * (MAX_PULSE_WIDTH-MIN_PULSE_WIDTH) + MIN_PULSE_WIDTH);
-        servo[5].writeMicroseconds(oscillator[5].refresh()/180 * (MAX_PULSE_WIDTH-MIN_PULSE_WIDTH) + MIN_PULSE_WIDTH);
+    while (millis() < _final_time){
+        side = (int)((millis()-_init_time) / (period[0]/2)) % 2;
+        setServo(0, oscillator[0].refresh());
+        setServo(1, oscillator[1].refresh());
+        setServo(4, oscillator[4].refresh());
+        setServo(5, oscillator[5].refresh());
+
         if (side == 0){
-            servo[3].writeMicroseconds(oscillator[3].refresh()/180 * (MAX_PULSE_WIDTH-MIN_PULSE_WIDTH) + MIN_PULSE_WIDTH);
-            servo[6].writeMicroseconds(oscillator[6].refresh()/180 * (MAX_PULSE_WIDTH-MIN_PULSE_WIDTH) + MIN_PULSE_WIDTH);
+            setServo(3, oscillator[3].refresh());
+            setServo(6, oscillator[6].refresh());
         }
         else{
-            servo[2].writeMicroseconds(oscillator[2].refresh()/180 * (MAX_PULSE_WIDTH-MIN_PULSE_WIDTH) + MIN_PULSE_WIDTH);
-            servo[7].writeMicroseconds(oscillator[7].refresh()/180 * (MAX_PULSE_WIDTH-MIN_PULSE_WIDTH) + MIN_PULSE_WIDTH);
+            setServo(2, oscillator[2].refresh());
+            setServo(7, oscillator[7].refresh());
         }
         delay(1);
     }
 }
 
+
+
 void MiniKame::home(){
     int ap = 20;
     int hi = 35;
-    int position[] = {90+ap,90-ap,100-hi,90+hi,90-ap,90+ap,92+hi,97-hi};
-    for (int i=0; i<8; i++) servo[i].writeMicroseconds(angToUsec(position[i])+trim[i]);
+    int position[] = {90+ap,90-ap,90-hi,90+hi,90-ap,90+ap,90+hi,90-hi};
+    for (int i=0; i<8; i++) setServo(i, position[i]);
 }
 
 void MiniKame::zero(){
-    for (int i=0; i<8; i++){
-        servo[i].writeMicroseconds(angToUsec(90+trim[i]));
+    for (int i=0; i<8; i++) setServo(i, 90);
+}
+
+void MiniKame::setServo(int id, float target){
+    servo[id].writeMicroseconds(angToUsec(target+trim[id]));
+    _servo_position[id] = target;
+}
+
+float MiniKame::getServo(int id){
+    return _servo_position[id];
+}
+
+
+void MiniKame::moveServos(int time, float target[8]) {
+    if (time>10){
+        for (int i = 0; i < 8; i++)	_increment[i] = (target[i] - _servo_position[i]) / (time / 10.0);
+        Serial.print("Increment: ");
+        Serial.println(_increment[0]);
+        Serial.print("Target: ");
+        Serial.println(target[0]);
+        _final_time =  millis() + time;
+
+        while (millis() < _final_time){
+            _partial_time = millis() + 10;
+            for (int i = 0; i < 8; i++) setServo(i, _servo_position[i] + _increment[i]);
+            Serial.print("Position: ");
+            Serial.println(_servo_position[0]);
+            while (millis() < _partial_time); //pause
+        }
     }
+    else{
+        for (int i = 0; i < 8; i++) setServo(i, target[i]);
+    }
+    for (int i = 0; i < 8; i++) _servo_position[i] = target[i];
 }
 
 void MiniKame::execute(float steps, float period[8], int amplitude[8], int offset[8], int phase[8]){
@@ -158,10 +192,10 @@ void MiniKame::execute(float steps, float period[8], int amplitude[8], int offse
         oscillator[i].setOffset(offset[i]);
     }
 
-    unsigned long final = millis() + period[0]*steps;
-    while (millis() < final){
+    _final_time = millis() + period[0]*steps;
+    while (millis() < _final_time){
         for (int i=0; i<8; i++){
-            servo[i].writeMicroseconds(angToUsec(oscillator[i].refresh()));
+            setServo(i, oscillator[i].refresh());
         }
     }
 }
