@@ -22,6 +22,8 @@ class Oscillator{
         void setPhase(int phase);
         void setOffset(int offset);
         void setTrim(int trim);
+        void setTime(unsigned long ref);
+        unsigned long getTime();
 
     private:
         int _period;

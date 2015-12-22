@@ -44,6 +44,14 @@ void Oscillator::setTrim(int trim){
     _trim = trim;
 }
 
+void Oscillator::setTime(unsigned long ref){
+    _ref_time = ref;
+}
+
+unsigned long Oscillator::getTime(){
+    return _ref_time;
+}
+
 float Oscillator::time_to_radians(double time){
     return time*2*PI/_period;
 }

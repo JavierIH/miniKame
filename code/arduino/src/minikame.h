@@ -13,8 +13,9 @@ class MiniKame{
         //void backward(float steps, float period);
         void turnL(float steps, float period);
         void turnR(float steps, float period);
+        void moonwalkL(float steps, float period);
         void dance(float steps, float period);
-        //void jump();
+        void jump();
         void home();
         void zero();
 
