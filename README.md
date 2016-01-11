@@ -10,6 +10,8 @@
 
 # License
 
+Son of [Kame](https://github.com/bqlabs/kame)
+
 <p align="right">
 <img src="doc/images/by-sa.png" width="200" align = "center">
 </p>
