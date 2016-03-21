@@ -15,11 +15,15 @@ class MiniKame{
         void turnR(float steps, float period);
         void moonwalkL(float steps, float period);
         void dance(float steps, float period);
+        void upDown(float steps, float period);
+        void pushUp(float steps, float period);
+        void hello();
         void jump();
         void home();
         void zero();
 
         void setServo(int id, float target);
+        void reverseServo(int id);
         float getServo(int id);
         void moveServos(int time, float target[8]);
 
@@ -28,6 +32,7 @@ class MiniKame{
         Servo servo[8];
         int board_pins[8];
         int trim[8];
+        bool reverse[8];
         unsigned long _init_time;
         unsigned long _final_time;
         unsigned long _partial_time;

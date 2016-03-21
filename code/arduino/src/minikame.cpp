@@ -5,6 +5,7 @@ int angToUsec(float value){
 }
 
 void MiniKame::init(){
+
     board_pins[0] = D1;
     board_pins[1] = D4,
     board_pins[2] = D8;
@@ -22,8 +23,10 @@ void MiniKame::init(){
     trim[5] = -5;
     trim[6] = 6;
     trim[7] = 2;
+    for (int i=0; i<8; i++) reverse[i] = 0;
 
-    //for(int i=0; i<8; i++) oscillator[i].setTrim(trim[i]);
+
+    for(int i=0; i<8; i++) oscillator[i].setTrim(trim[i]);
     for(int i=0; i<8; i++) servo[i].attach(board_pins[i]);
     home();
 }
@@ -148,6 +151,64 @@ void MiniKame::walk(float steps, float T=5000){
     }
 }
 
+void MiniKame::upDown(float steps, float T=5000){
+    int x_amp = 0;
+    int z_amp = 35;
+    int ap = 20;
+    int hi = 25;
+    int front_x = 0;
+    float period[] = {T, T, T, T, T, T, T, T};
+    int amplitude[] = {x_amp,x_amp,z_amp,z_amp,x_amp,x_amp,z_amp,z_amp};
+    int offset[] = {    90+ap-front_x,
+                        90-ap+front_x,
+                        90-hi,
+                        90+hi,
+                        90-ap-front_x,
+                        90+ap+front_x,
+                        90+hi,
+                        90-hi
+                    };
+    int phase[] = {0,0,90,270,180,180,270,90};
+
+    execute(steps, period, amplitude, offset, phase);
+}
+
+
+void MiniKame::pushUp(float steps, float T=600){
+    int z_amp = 40;
+    int x_amp = 65;
+    int hi = 30;
+    float period[] = {T, T, T, T, T, T, T, T};
+    int amplitude[] = {0,0,z_amp,z_amp,0,0,0,0};
+    int offset[] = {90,90,90-hi,90+hi,90-x_amp,90+x_amp,90+hi,90-hi};
+    int phase[] = {0,0,0,180,0,0,0,0};
+
+    execute(steps, period, amplitude, offset, phase);
+}
+
+void MiniKame::hello(){
+    float sentado[]={90+15,90-15,90-65,90+65,90+20,90-20,90+10,90-10};
+    moveServos(150, sentado);
+    delay(200);
+
+    int z_amp = 40;
+    int x_amp = 60;
+    int T=350;
+    float period[] = {T, T, T, T, T, T, T, T};
+    int amplitude[] = {0,50,0,50,0,0,0,0};
+    int offset[] = {90+15,40,90-65,90,90+20,90-20,90+10,90-10};
+    int phase[] = {0,0,0,90,0,0,0,0};
+
+    execute(4, period, amplitude, offset, phase);
+
+    float goingUp[]={160,20,90,90,90-20,90+20,90+10,90-10};
+    moveServos(500, goingUp);
+    delay(200);
+
+}
+
+
+
 void MiniKame::jump(){
     float sentado[]={90+15,90-15,90-65,90+65,90+20,90-20,90+10,90-10};
     int ap = 20;
@@ -171,8 +232,19 @@ void MiniKame::zero(){
     for (int i=0; i<8; i++) setServo(i, 90);
 }
 
+void MiniKame::reverseServo(int id){
+    if (reverse[id])
+        reverse[id] = 0;
+    else
+        reverse[id] = 1;
+}
+
+
 void MiniKame::setServo(int id, float target){
-    servo[id].writeMicroseconds(angToUsec(target+trim[id]));
+    if (!reverse[id])
+        servo[id].writeMicroseconds(angToUsec(target+trim[id]));
+    else
+        servo[id].writeMicroseconds(angToUsec(180-(target+trim[id])));
     _servo_position[id] = target;
 }
 
