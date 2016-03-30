@@ -21,8 +21,8 @@ void MiniKame::init(){
     trim[3] = 4;
     trim[4] = 2;
     trim[5] = -5;
-    trim[6] = 6;
-    trim[7] = 2;
+    trim[6] = 8;
+    trim[7] = 5;
     for (int i=0; i<8; i++) reverse[i] = 0;
 
 
@@ -66,6 +66,19 @@ void MiniKame::dance(float steps, float T=600){
     int amplitude[] = {x_amp,x_amp,z_amp,z_amp,x_amp,x_amp,z_amp,z_amp};
     int offset[] = {90+ap,90-ap,90-hi,90+hi,90-ap,90+ap,90+hi,90-hi};
     int phase[] = {0,0,0,270,0,0,90,180};
+
+    execute(steps, period, amplitude, offset, phase);
+}
+
+void MiniKame::frontBack(float steps, float T=600){
+    int x_amp = 30;
+    int z_amp = 25;
+    int ap = 20;
+    int hi = 30;
+    float period[] = {T, T, T, T, T, T, T, T};
+    int amplitude[] = {x_amp,x_amp,z_amp,z_amp,x_amp,x_amp,z_amp,z_amp};
+    int offset[] = {90+ap,90-ap,90-hi,90+hi,90-ap,90+ap,90+hi,90-hi};
+    int phase[] = {0,180,270,90,0,180,90,270};
 
     execute(steps, period, amplitude, offset, phase);
 }

@@ -28,7 +28,7 @@ void parseData(String data){
     switch (data.toInt()){
 
         case 1:
-            robot.walk(1,400);
+            robot.walk(1,550);
             running = 1;
             break;
 
@@ -37,12 +37,12 @@ void parseData(String data){
             break;
 
         case 3:
-            robot.turnL(1,400);
+            robot.turnL(1,550);
             running = 1;
             break;
 
         case 4:
-            robot.turnR(1,400);
+            robot.turnR(1,550);
             running = 1;
             break;
 
@@ -68,7 +68,8 @@ void parseData(String data){
             break;
 
         case 10: //punch
-            robot.moonwalkL(4,2000);
+        //robot.moonwalkL(4,2000);
+        robot.frontBack(4,200);
             break;
 
         case 11: //mask
@@ -84,7 +85,6 @@ void parseData(String data){
 String input;
 
 void loop() {
-
     WiFiClient client = server.available();
     if (!client) {
         Serial.println(WiFi.localIP());

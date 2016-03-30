@@ -21,6 +21,7 @@ class MiniKame{
         void jump();
         void home();
         void zero();
+        void frontBack(float steps, float period);
 
         void setServo(int id, float target);
         void reverseServo(int id);
