@@ -1,12 +1,13 @@
 #ifndef octosnake_h
 #define octosnake_h
 
+#include <Arduino.h>
 #include <Servo.h>
 
-//-- Macro for converting from degrees to radians
-#ifndef DEG2RAD
-  #define DEG2RAD(g) ((g)*M_PI)/180
+#ifndef PI
+  #define PI 3.14159
 #endif
+
 
 class Oscillator{
 
@@ -14,6 +15,9 @@ class Oscillator{
         Oscillator();
         float refresh();
         void reset();
+        void start();
+        void start(unsigned long ref_time);
+        void stop();
         float time_to_radians(double time);
         float degrees_to_radians(float degrees);
         float degrees_to_time(float degrees);
@@ -21,8 +25,9 @@ class Oscillator{
         void setAmplitude(int amplitude);
         void setPhase(int phase);
         void setOffset(int offset);
-        void setTrim(int trim);
         void setTime(unsigned long ref);
+        float getOutput();
+        float getPhaseProgress();
         unsigned long getTime();
 
     private:
@@ -30,7 +35,7 @@ class Oscillator{
         int _amplitude;
         int _phase;
         int _offset;
-        int _trim;
+        float _output;
         bool _stop;
         unsigned long _ref_time = 0;
         float _delta_time = 0;

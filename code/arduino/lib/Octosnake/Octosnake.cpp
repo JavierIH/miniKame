@@ -1,4 +1,4 @@
-#include "octosnake.h"
+#include "Octosnake.h"
 #include <Servo.h>
 
 Oscillator::Oscillator(){
@@ -6,22 +6,38 @@ Oscillator::Oscillator(){
     _amplitude = 50;
     _phase = 0;
     _offset = 0;
-    _stop = false;
+    _stop = true;
     _ref_time = millis();
     _delta_time = 0;
-    _trim = 0;
 }
 
 float Oscillator::refresh(){
-    _delta_time = (millis()-_ref_time) % _period;
-    return      (float)_amplitude*sin(time_to_radians(_delta_time)
-                + degrees_to_radians(_phase))
-                + _offset
-                + _trim;
+    if (!_stop){
+        _delta_time = (millis()-_ref_time) % _period;
+        _output =   (float)_amplitude*sin(time_to_radians(_delta_time)
+                    + degrees_to_radians(_phase))
+                    + _offset;
+    }
+
+    return _output;
 }
 
 void Oscillator::reset(){
     _ref_time = millis();
+}
+
+void Oscillator::start(){
+    reset();
+    _stop = false;
+}
+
+void Oscillator::start(unsigned long ref_time){
+    _ref_time = ref_time;
+    _stop = false;
+}
+
+void Oscillator::stop(){
+    _stop = true;
 }
 
 void Oscillator::setPeriod(int period){
@@ -40,16 +56,20 @@ void Oscillator::setOffset(int offset){
     _offset = offset;
 }
 
-void Oscillator::setTrim(int trim){
-    _trim = trim;
-}
-
 void Oscillator::setTime(unsigned long ref){
     _ref_time = ref;
 }
 
+float Oscillator::getOutput(){
+    return _output;
+}
+
 unsigned long Oscillator::getTime(){
     return _ref_time;
+}
+
+float Oscillator::getPhaseProgress(){
+    return ((float)_delta_time/_period) * 360;
 }
 
 float Oscillator::time_to_radians(double time){

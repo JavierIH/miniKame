@@ -2,7 +2,7 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <Servo.h>
-#include "octosnake.h"
+//#include <ctosnake.h>
 #include "minikame.h"
 
 const char* ssid = "kame";
@@ -52,7 +52,7 @@ void parseData(String data){
             break;
 
         case 6: //heart
-            robot.pushUp(2,1400);
+            robot.pushUp(2,5000);
             break;
 
         case 7: //fire

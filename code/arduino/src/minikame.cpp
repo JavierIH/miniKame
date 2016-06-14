@@ -15,20 +15,22 @@ void MiniKame::init(){
     board_pins[6] = D2;
     board_pins[7] = D3;
 
-    trim[0] = 1;
+    trim[0] = 0;
     trim[1] = -8;
-    trim[2] = 6;
-    trim[3] = 4;
+    trim[2] = 8;
+    trim[3] = 5;
     trim[4] = 2;
-    trim[5] = -5;
-    trim[6] = 8;
+    trim[5] = -6;
+    trim[6] = 6;
     trim[7] = 5;
     for (int i=0; i<8; i++) reverse[i] = 0;
 
 
-    for(int i=0; i<8; i++) oscillator[i].setTrim(trim[i]);
-    for(int i=0; i<8; i++) servo[i].attach(board_pins[i]);
-    home();
+    for(int i=0; i<8; i++){
+         oscillator[i].start();
+         servo[i].attach(board_pins[i]);
+     }
+    zero();
 }
 
 void MiniKame::turnR(float steps, float T=600){
@@ -194,7 +196,7 @@ void MiniKame::pushUp(float steps, float T=600){
     float period[] = {T, T, T, T, T, T, T, T};
     int amplitude[] = {0,0,z_amp,z_amp,0,0,0,0};
     int offset[] = {90,90,90-hi,90+hi,90-x_amp,90+x_amp,90+hi,90-hi};
-    int phase[] = {0,0,0,180,0,0,0,0};
+    int phase[] = {0,0,0,180,0,0,0,180};
 
     execute(steps, period, amplitude, offset, phase);
 }
