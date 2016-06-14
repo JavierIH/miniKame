@@ -10,6 +10,7 @@ class MiniKame{
         void init();
         void run(float steps, float period);
         void walk(float steps, float period);
+        void omniWalk(float steps, float T, bool side, float turn_factor);
         //void backward(float steps, float period);
         void turnL(float steps, float period);
         void turnR(float steps, float period);

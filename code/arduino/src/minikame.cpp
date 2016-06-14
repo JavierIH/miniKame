@@ -107,6 +107,41 @@ void MiniKame::run(float steps, float T=5000){
     execute(steps, period, amplitude, offset, phase);
 }
 
+void MiniKame::omniWalk(float steps, float T, bool side, float turn_factor){
+    int x_amp = 15;
+    int z_amp = 15;
+    int ap = 15;
+    int hi = 23;
+    int front_x = 6 * pow(turn_factor, 2);
+    float period[] = {T, T, T, T, T, T, T, T};
+    int amplitude[] = {x_amp,x_amp,z_amp,z_amp,x_amp,x_amp,z_amp,z_amp};
+    int offset[] = {    90+ap-front_x,
+                        90-ap+front_x,
+                        90-hi,
+                        90+hi,
+                        90-ap-front_x,
+                        90+ap+front_x,
+                        90+hi,
+                        90-hi
+                    };
+
+    int phase[8];
+    if (side){
+        int phase1[] =  {0,   0,   90,  90,  180, 180, 90,  90};
+        int phase2R[] = {0,   180, 90,  90,  180, 0,   90,  90};
+        for (int i=0; i<8; i++)
+            phase[i] = phase1[i]*(1-turn_factor) + phase2R[i]*turn_factor;
+    }
+    else{
+        int phase1[] =  {0,   0,   90,  90,  180, 180, 90,  90};
+        int phase2L[] = {180, 0,   90,  90,  0,   180, 90,  90};
+        for (int i=0; i<8; i++)
+            phase[i] = phase1[i]*(1-turn_factor) + phase2L[i]*turn_factor + oscillator[i].getPhaseProgress();
+    }
+
+    execute(steps, period, amplitude, offset, phase);
+}
+
 void MiniKame::moonwalkL(float steps, float T=5000){
     int z_amp = 45;
     float period[] = {T, T, T, T, T, T, T, T};
@@ -118,14 +153,14 @@ void MiniKame::moonwalkL(float steps, float T=5000){
 }
 
 void MiniKame::walk(float steps, float T=5000){
-    volatile int x_amp = 15;
-    volatile int z_amp = 20;
-    volatile int ap = 20;
-    volatile int hi = 10;
-    volatile int front_x = 12;
-    volatile float period[] = {T, T, T/2, T/2, T, T, T/2, T/2};
-    volatile int amplitude[] = {x_amp,x_amp,z_amp,z_amp,x_amp,x_amp,z_amp,z_amp};
-    volatile int offset[] = {   90+ap-front_x,
+    int x_amp = 15;
+    int z_amp = 20;
+    int ap = 20;
+    int hi = 10;
+    int front_x = 12;
+    float period[] = {T, T, T/2, T/2, T, T, T/2, T/2};
+    int amplitude[] = {x_amp,x_amp,z_amp,z_amp,x_amp,x_amp,z_amp,z_amp};
+    int offset[] = {   90+ap-front_x,
                                 90-ap+front_x,
                                 90-hi,
                                 90+hi,
@@ -134,7 +169,7 @@ void MiniKame::walk(float steps, float T=5000){
                                 90+hi,
                                 90-hi
                     };
-    volatile int  phase[] = {90, 90, 270, 90, 270, 270, 90, 270};
+    int  phase[] = {90, 90, 270, 90, 270, 270, 90, 270};
 
     for (int i=0; i<8; i++){
         oscillator[i].reset();
