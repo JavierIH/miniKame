@@ -112,7 +112,7 @@ void MiniKame::omniWalk(float steps, float T, bool side, float turn_factor){
     int z_amp = 15;
     int ap = 15;
     int hi = 23;
-    int front_x = 6 * pow(turn_factor, 2);
+    int front_x = 6 * (1-pow(turn_factor, 2));
     float period[] = {T, T, T, T, T, T, T, T};
     int amplitude[] = {x_amp,x_amp,z_amp,z_amp,x_amp,x_amp,z_amp,z_amp};
     int offset[] = {    90+ap-front_x,
