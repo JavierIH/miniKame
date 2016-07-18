@@ -87,7 +87,9 @@ String input;
 void loop() {
     WiFiClient client = server.available();
     if (!client) {
-        Serial.println(WiFi.localIP());
+        IPAddress myIP = WiFi.softAPIP();
+        Serial.print("AP IP address: ");
+        Serial.println(myIP);
         delay(1000);
     }
     while (client.connected()) {
