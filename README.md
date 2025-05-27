@@ -1,3 +1,6 @@
+> 📌 **A newer and more advanced version of this robot is available:** [Kame32](https://github.com/tu-usuario/kame32)
+
+
 # Kame (MiniKame)
 
 <p align="center">
