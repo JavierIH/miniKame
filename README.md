@@ -1,4 +1,4 @@
-> 📌 **A newer and more advanced version of this robot is available:** [Kame32](https://github.com/tu-usuario/kame32)
+> 📌 **A newer and more advanced version of this robot is available:** [Kame32](https://github.com/javierih/kame32)
 
 
 # Kame (MiniKame)
